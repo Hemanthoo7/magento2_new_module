@@ -1,6 +1,6 @@
 <?php
  
-namespace webkul\hello\Block\Customer;
+namespace Webkul\Hello\Block\Customer;
  
 use Magento\Framework\View\Element\Template;
  
