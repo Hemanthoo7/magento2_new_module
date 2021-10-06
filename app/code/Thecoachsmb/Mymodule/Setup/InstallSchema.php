@@ -1,71 +1,70 @@
 <?php
-
+ 
 namespace Thecoachsmb\Mymodule\Setup;
-
+ 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Setup\Exception;
-
+use Magento\Framework\Setup\ModuleContextInterface;
+ 
 class InstallSchema implements InstallSchemaInterface
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $installer = $setup;
-
         $installer->startSetup();
-        try {
-            $table = $installer->getConnection()->newTable(
-                $installer->getTable('extension')
-            )->addColumn(
-                'id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['identity' => true, 'nullable' => false, 'primary' => true],
-                'Record Id'
-            )->addColumn(
-                'name',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                255,
-                ['nullable' => false],
-                'Name'
-            )->addColumn(
-                'email',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                '255',
-                ['nullable' => false],
-                'Email'
-            )->addColumn(
-                'telephone',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                '255',
-                ['nullable' => false],
-                'Telephone'
-            )->addColumn(
-                'created_at',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-                null,
-                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
-                'Created At'
-            )->addColumn(
-                'update_time',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-                null,
-                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
-                'Updated At'
-            )->setComment(
-                'Data Table'
-            );
-
+        $tableName = $installer->getTable('thecoachsmb_students');
+        //Check for the existence of the table
+        if ($installer->getConnection()->isTableExists($tableName) != true) {
+            $table = $installer->getConnection()
+                ->newTable($tableName)
+                ->addColumn(
+                    'id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    [
+                        'identity' => true,
+                        'unsigned' => true,
+                        'nullable' => false,
+                        'primary' => true
+                    ],
+                    'ID'
+                )
+                ->addColumn(
+                    'name',
+                    Table::TYPE_TEXT,
+                    null,
+                    ['nullable' => false, 'default' => ''],
+                    'Name'
+                )
+                ->addColumn(
+                    'course',
+                    Table::TYPE_TEXT,
+                    null,
+                    ['nullable' => false, 'default' => ''],
+                    'Course'
+                )
+                ->addColumn(
+                    'joined_at',
+                    Table::TYPE_DATETIME,
+                    null,
+                    ['nullable' => false],
+                    'Joined At'
+                )
+                ->addColumn(
+                    'gender',
+                    Table::TYPE_TEXT,
+                    null,
+                    ['nullable' => false, 'default' => '0'],
+                    'Gender'
+                )
+                //Set comment for thecoachsmb_students table
+                ->setComment('Thecoachsmb Students Table')
+                //Set option for thecoachsmb_students table
+                ->setOption('type', 'InnoDB')
+                ->setOption('charset', 'utf8');
             $installer->getConnection()->createTable($table);
-            $installer->endSetup();
-        } catch (Exception $err) {
-            \Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->info($err->getMessage());
         }
+        $installer->endSetup();
     }
 }
