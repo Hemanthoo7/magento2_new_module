@@ -1,6 +1,6 @@
 <?php
 
-    namespace [Webkul]\[Hello]\Plugin\Checkout\Controller;
+    namespace Webkul\Hello\Plugin\Checkout\Controller;
 
     class RestrictProductQuantity
     {
