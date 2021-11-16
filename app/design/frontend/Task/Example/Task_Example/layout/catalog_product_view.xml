@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance";; xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <body>
+    <!— 1st Code Block: Get Related Products as new tab -->
+    <referenceBlock name="product.info.details">
+      <block class="Magento\Catalog\Block\Product\View" name="deliveryinfo.tab" as="deliveryinfo" template="Task_Example::product/related-products.phtml" group="detailed_info" >
+        <arguments>
+          <argument translate="true" name="Custom Tab" xsi:type="string">Related Products</argument>
+        </arguments>
+      </block>
+    </referenceBlock>
+ 
+    <!— 2nd Code Block: Move original block to product info tabs -->
+    <move element="catalog.product.related" destination="product.info.details" />
+  </body>
+</page>
